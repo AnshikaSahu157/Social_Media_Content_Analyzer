@@ -1,15 +1,18 @@
 import path from "path";
-import { createServer } from "./index";
+import { fileURLToPath } from "url";
+import { createServer } from "./index.js"; // make sure .js for ESM
 import express from "express";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = createServer();
 const port = process.env.PORT || 3000;
 
-// In production, serve the built SPA files
-const __dirname = import.meta.dirname;
+// Serve SPA files
 const distPath = path.join(__dirname, "../spa");
 
-// Health check endpoint (important for Render/hosting)
+// Health check endpoint
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
@@ -17,14 +20,13 @@ app.get("/health", (req, res) => {
 // Serve static files
 app.use(express.static(distPath));
 
-// ✅ React Router fallback (no regex, avoids path-to-regexp bug)
+// React Router fallback
 app.use((req, res, next) => {
-  if (req.path.startsWith("/api/") || req.path.startsWith("/health")) {
-    return next(); // let API routes through
-  }
+  if (req.path.startsWith("/api/") || req.path === "/health") return next();
   res.sendFile(path.join(distPath, "index.html"));
 });
 
+// Start server
 app.listen(port, () => {
   console.log(`🚀 Fusion Starter server running on port ${port}`);
   console.log(`📱 Frontend: http://localhost:${port}`);

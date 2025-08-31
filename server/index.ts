@@ -19,10 +19,17 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
-  // Catch unknown API routes (important when frontend is also served)
-  app.use("/api/*", (_req, res) => {
+  // Catch unknown API routes (avoid path-to-regexp bug)
+  app.all(/^\/api\/.*/, (_req, res) => {
     res.status(404).json({ error: "API endpoint not found" });
+  });
+
+  // Global error handler
+  app.use((err, _req, res, _next) => {
+    console.error("Server error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
   });
 
   return app;
 }
+
