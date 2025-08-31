@@ -72,11 +72,11 @@ function buildHashtags(tokens: string[], words: string[], platform: Platform, ex
 
   const validWord = (w: string) => w.length >= 3 && !noise.has(w) && !stopwords.has(w) && !/^\d+$/.test(w);
 
-  // unigrams
+  
   const uni = new Map<string, number>();
   for (const w of words) if (validWord(w)) uni.set(w, (uni.get(w) ?? 0) + 1);
 
-  // bigrams
+  
   const bi = new Map<string, number>();
   for (let i = 0; i < words.length - 1; i++) {
     const a = words[i], b = words[i + 1];
@@ -86,20 +86,19 @@ function buildHashtags(tokens: string[], words: string[], platform: Platform, ex
     }
   }
 
-  // score candidates (favor bigrams)
+  
   const candidates: Array<{ term: string; score: number }> = [];
   for (const [k, v] of uni) candidates.push({ term: k, score: v });
   for (const [k, v] of bi) candidates.push({ term: k, score: v * 2 });
-  // small jitter so Regenerate can reshuffle ties
+  
   candidates.forEach((c, i) => (c.score += (Math.random() - 0.5) * 0.1));
 
-  // emoji cues
   const emojiMap: Record<string, string> = { "🚀": "launch", "🔥": "trending", "✨": "tips", "🎯": "goals", "📈": "growth" };
   for (const t of tokens) for (const [e, w] of Object.entries(emojiMap)) if (t.includes(e)) candidates.push({ term: w, score: 1.2 });
 
   candidates.sort((a, b) => b.score - a.score);
 
-  // platform caps
+  
   const cap: Record<Platform, number> = { twitter: 3, instagram: 7, tiktok: 5, youtube: 5, linkedin: 5 };
   const out: string[] = [];
   for (const { term } of candidates) {
@@ -112,7 +111,7 @@ function buildHashtags(tokens: string[], words: string[], platform: Platform, ex
     if (out.length >= cap[platform]) break;
   }
 
-  // ensure at least 2 general but relevant fallbacks
+  
   const general = ["#growth", "#marketing", "#strategy", "#content"];
   for (const g of general) {
     if (out.length >= Math.max(3, cap[platform])) break;
@@ -182,7 +181,7 @@ function analyze(text: string, platform: Platform, nonce = 0, exclude?: Set<stri
     .slice(0, 8)
     .map(([k, v]) => ({ key: k, value: v }));
 
-  // Build hashtag suggestions using n-grams and noise filtering
+  
   const existing = new Set(hashtags.map((h) => h.toLowerCase()));
   let suggestions = buildHashtags(tokens, words, platform, existing, exclude ?? new Set(), nonce);
   if (suggestions.length === 0) {
@@ -241,16 +240,16 @@ function optimizeContent(text: string, platform: Platform, r: ReturnType<typeof 
   const tagsToAdd = r.hashtagSuggestions.slice(0, 3).join(" ");
   const withTags = (s: string) => (tagsToAdd ? `${s} ${tagsToAdd}` : s);
 
-  // Variant 1: Concise punchy
+
   const hook = r.keywords[0]?.key ? `🚀 ${r.keywords[0].key.charAt(0).toUpperCase() + r.keywords[0].key.slice(1)} —` : "🚀";
   const concise = withTags(ensureCTA(`${hook} ${base}`.replace(/\s+/g, " ").trim()));
 
-  // Variant 2: Benefit-driven
+  
   const k1 = r.keywords[0]?.key ?? "results";
   const k2 = r.keywords[1]?.key ?? "growth";
   const benefit = withTags(ensureCTA(`Want better ${k1}? Here's how we approach ${k2}. ${base}`));
 
-  // Variant 3: List-style teaser (single line with dashes)
+  
   const list = withTags(ensureCTA(`${k1} • ${k2} • ${r.keywords[2]?.key ?? "tips"} — ${base}`));
 
   return { concise, benefit, list };
@@ -266,8 +265,7 @@ export default function Index() {
   const { toast } = useToast();
   const result = useMemo(() => (text.trim() ? analyze(text, platform, regen, new Set(excludeTags)) : null), [text, platform, regen, excludeTags]);
 
-  // Reset exclusions whenever source content or platform changes
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
 
   const handleFile = async (file: File | null) => {
     if (!file) return;

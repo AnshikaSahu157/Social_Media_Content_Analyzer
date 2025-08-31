@@ -33,7 +33,7 @@ export default defineConfig(({ mode }) => ({
 function expressPlugin(): Plugin {
   return {
     name: "express-plugin",
-    apply: "serve", // only for `vite dev`
+    apply: "serve",
     configureServer(server) {
       import("./server").then(({ createServer }) => {
         const app = createServer();
