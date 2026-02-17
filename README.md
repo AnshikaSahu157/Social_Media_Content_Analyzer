@@ -105,3 +105,8 @@ The project is ready for Render.com or any Node.js hosting platform.
 Ensure the dist folder is included in deployment.
 
 Set environment variables like PORT and PING_MESSAGE as required.
+
+**Live Link**
+```
+https://social-media-content-analyzer-3-f1aj.onrender.com
+```
