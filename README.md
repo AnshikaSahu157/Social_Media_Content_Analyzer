@@ -25,7 +25,7 @@ The project uses **SSR (Server-Side Rendering) configuration for backend** and s
 - Tailwind CSS styling
 - Compatible with Node.js v22+
 
----
+```
 
 ## Project Structure
 
@@ -40,6 +40,7 @@ The project uses **SSR (Server-Side Rendering) configuration for backend** and s
 ├── vite.config.ts # Vite frontend config
 ├── vite.config.server.ts # Vite server config
 └── README.md
+```
 
 ## Installation
 
