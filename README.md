@@ -25,10 +25,10 @@ The project uses **SSR (Server-Side Rendering) configuration for backend** and s
 - Tailwind CSS styling
 - Compatible with Node.js v22+
 
-```
+
 
 ## Project Structure
-
+```
 .
 ├── client/ # React frontend
 ├── server/ # Express backend
@@ -49,16 +49,17 @@ The project uses **SSR (Server-Side Rendering) configuration for backend** and s
 ```bash
 git clone <your-repo-url>
 cd social
-
+```
 2. Install dependencies:
-
+```
 pnpm install
 # or
 npm install
-
+```
 Running Locally:
 
 Development Mode (Frontend + Backend)
+```
  pnpm dev
  # or
  npm run dev
@@ -66,25 +67,25 @@ Development Mode (Frontend + Backend)
 
 Frontend: http://localhost:8080
 Backend API: http://localhost:8080/api
-
-Production Mode
+```
+**Production Mode**
 
 1. Build the project:
-
+```
  pnpm build
  # or
  npm run build
-
+```
 2. Start the server:
-
+```
 pnpm start
 # or
 npm run start
 
-
+```
 Frontend and backend will be served from the built dist folder.
 
-API ENDPOINTS:
+**API ENDPOINTS:**
 
 Ping: GET /api/ping
 Returns { message: "ping" } (or value from .env PING_MESSAGE)
@@ -97,7 +98,7 @@ Returns { status: "ok" }
 
 Unknown API routes: Returns 404
 
-DEPLOYMENT:
+**DEPLOYMENT:**
 
 The project is ready for Render.com or any Node.js hosting platform.
 
